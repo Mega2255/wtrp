@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Vision | Worldtree Publishing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden; 
+        }
+        
+        .navy-bg { background-color: #001f54; }
+        .navy-text { color: #001f54; }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-divider {
+            width: 80px;
+            height: 4px;
+            background-color: #001f54;
+            margin: 0 auto;
+        }
+        
+        .vision-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid #001f54;
+        }
+        
+        .vision-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 30px rgba(0, 31, 84, 0.15);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #001f54;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            padding: 80px 30px 30px;
+        }
+        
+        .mobile-menu.active {
+            right: 0;
+        }
+        
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+        
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .mobile-menu-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #001f54;
+        }
+        
+        .mobile-nav-link {
+            display: block;
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #001f54;
+            border-bottom: 1px solid #f0f0f0;
+            transition: color 0.2s ease;
+        }
+        
+        .mobile-nav-link:hover {
+            color: #003d99;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem !important; }
+            h2 { font-size: 1.5rem !important; }
+            .hero-section { padding: 60px 20px !important; }
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <i class="fa-solid fa-times mobile-menu-close" id="closeMenu"></i>
+        <nav class="flex flex-col">
+            <a href="index.html" class="mobile-nav-link">Home</a>
+            <a href="mission.html" class="mobile-nav-link">Our Story & Mission</a>
+            <a href="vision.html" class="mobile-nav-link">Vision</a>
+            <a href="register.html" class="mobile-nav-link">Register</a>
+            <a href="login.html" class="mobile-nav-link">Login</a>
+        </nav>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex items-center justify-between px-4 md:px-10 py-4 border-b border-gray-200 sticky top-0 bg-white z-50">
+        <div class="flex items-center">
+            <a href="index.html" class="flex items-center cursor-pointer">
+                <img 
+                    src="logo.png" 
+                    alt="Worldtree Publishing Logo" 
+                    class="h-8 md:h-10 w-auto object-contain"
+                />
+            </a>
+        </div>
+        
+        <div class="hidden lg:flex space-x-8 text-base font-semibold navy-text">
+            <a href="index.html" class="hover:text-blue-600 transition-colors">Home</a>
+            <a href="mission.html" class="hover:text-blue-600 transition-colors">Our Story & Mission</a>
+            <a href="vision.html" class="hover:text-blue-600 transition-colors">Vision</a>
+            <a href="register.html" class="hover:text-blue-600 transition-colors">Register</a>
+            <a href="login.html" class="hover:text-blue-600 transition-colors">Login</a>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+            <i class="fa-solid fa-bars text-2xl navy-text cursor-pointer lg:hidden" id="hamburgerMenu"></i>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="navy-bg hero-section py-20 px-6 md:py-32">
+        <div class="max-w-4xl mx-auto text-center fade-in">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+                Our Vision
+            </h1>
+            <p class="text-lg md:text-xl text-gray-200 leading-relaxed">
+                Shaping the future of visual storytelling across cultures
+            </p>
+        </div>
+    </section>
+
+    <!-- Vision Statement Section -->
+    <section class="py-16 md:py-24 px-6 bg-white">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold navy-text mb-4">Looking Ahead</h2>
+                <div class="section-divider mb-8"></div>
+            </div>
+            
+            <div class="bg-gradient-to-br from-blue-50 to-white p-8 md:p-12 rounded-lg shadow-xl border-t-4 border-blue-900">
+                <p class="text-lg md:text-xl leading-relaxed text-gray-700 text-center mb-6">
+                    To become a <span class="font-bold navy-text">globally trusted illustration house</span>, known for nurturing creative talent, maintaining professional integrity, and shaping stories that resonate across cultures through thoughtful, high-quality visual narratives.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Pillars Section -->
+    <section class="py-16 md:py-24 px-6 bg-gray-50">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold navy-text mb-4">Our Vision Pillars</h2>
+                <div class="section-divider mb-8"></div>
+                <p class="text-gray-600 text-lg max-w-3xl mx-auto">
+                    Three core pillars guide our vision for the future
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="feature-card bg-white p-8 rounded-lg shadow-lg text-center">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-seedling text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold navy-text mb-4">Nurturing Creative Talent</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Empowering illustrators worldwide to grow, develop their craft, and reach their full creative potential through supportive partnerships
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-white p-8 rounded-lg shadow-lg text-center">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-handshake text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold navy-text mb-4">Professional Integrity</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Maintaining the highest standards of ethical practice, transparency, and reliability in every project and partnership
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-white p-8 rounded-lg shadow-lg text-center">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-globe text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold navy-text mb-4">Cross-Cultural Storytelling</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Creating visual narratives that transcend boundaries and connect with audiences across diverse cultures and communities
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Children's Illustration Section -->
+    <section class="py-16 md:py-24 px-6 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold navy-text mb-6">
+                        Children's Illustration & Storytelling
+                    </h2>
+                    <div class="w-20 h-1 navy-bg mb-6"></div>
+                    
+                    <p class="text-lg leading-relaxed text-gray-700 mb-6">
+                        Specializing in children's storytelling, we view illustrations not just as visuals but as <span class="font-semibold navy-text">powerful narrative tools</span>.
+                    </p>
+                    
+                    <p class="text-lg leading-relaxed text-gray-700 mb-6">
+                        Our bespoke, story-driven artwork connects emotionally with young audiences while building a strong, consistent brand identity.
+                    </p>
+                    
+                    <div class="vision-card bg-blue-50 p-6 rounded-lg mb-4">
+                        <div class="flex items-start gap-4">
+                            <i class="fa-solid fa-book-open text-2xl navy-text mt-1"></i>
+                            <div>
+                                <h4 class="font-bold navy-text mb-2">Story-Driven Approach</h4>
+                                <p class="text-gray-600">Every illustration serves the narrative, enhancing the emotional connection and comprehension for young readers</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="vision-card bg-blue-50 p-6 rounded-lg">
+                        <div class="flex items-start gap-4">
+                            <i class="fa-solid fa-heart text-2xl navy-text mt-1"></i>
+                            <div>
+                                <h4 class="font-bold navy-text mb-2">Emotional Resonance</h4>
+                                <p class="text-gray-600">Creating art that speaks to children's imagination and builds lasting connections with stories</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-8 text-center">
+                        <i class="fa-solid fa-child text-4xl navy-text mb-3"></i>
+                        <h4 class="font-bold navy-text text-lg">Young Audiences</h4>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-8 text-center">
+                        <i class="fa-solid fa-paint-brush text-4xl navy-text mb-3"></i>
+                        <h4 class="font-bold navy-text text-lg">Bespoke Art</h4>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-8 text-center">
+                        <i class="fa-solid fa-lightbulb text-4xl navy-text mb-3"></i>
+                        <h4 class="font-bold navy-text text-lg">Brand Identity</h4>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-8 text-center">
+                        <i class="fa-solid fa-star text-4xl navy-text mb-3"></i>
+                        <h4 class="font-bold navy-text text-lg">Quality Focus</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="py-16 md:py-24 px-6 bg-gray-50">
+        <div class="max-w-5xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold navy-text mb-6">
+                Making a Global Impact
+            </h2>
+            <div class="section-divider mb-8"></div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="text-4xl font-bold navy-text mb-2">Global</div>
+                    <p class="text-gray-600">Reach Across Continents</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="text-4xl font-bold navy-text mb-2">Trusted</div>
+                    <p class="text-gray-600">Professional Partnerships</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="text-4xl font-bold navy-text mb-2">Quality</div>
+                    <p class="text-gray-600">High-Standard Narratives</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="navy-bg py-16 md:py-20 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+                Be Part of Our Vision
+            </h2>
+            <p class="text-lg text-gray-200 mb-8">
+                Join us in creating visual stories that inspire, connect, and resonate across the globe
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/register" class="bg-white navy-text px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                    Join Our Team
+                </a>
+                <a href="story-mission.html" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-900 transition-colors">
+                    Read Our Story
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Worldtree Publishing</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Supporting meaningful creative skills since the early 2000s
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="story-mission.html" class="text-gray-400 hover:text-white transition-colors">Our Story & Mission</a></li>
+                        <li><a href="vision.html" class="text-gray-400 hover:text-white transition-colors">Vision</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <p class="text-gray-400 text-sm">hello@worldtreepublishing.com</p>
+                    <p class="text-gray-400 text-sm">t: 1-646-808-0205</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-6 text-center">
+                <p class="text-gray-500 text-sm">© 2025 Worldtree Publishing. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const closeMenu = document.getElementById('closeMenu');
+        
+        function openMobileMenu() {
+            mobileMenu.classList.add('active');
+            mobileOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        hamburgerMenu.addEventListener('click', openMobileMenu);
+        closeMenu.addEventListener('click', closeMobileMenu);
+        mobileOverlay.addEventListener('click', closeMobileMenu);
+        
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+    </script>
+</body>
+</html>

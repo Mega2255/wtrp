@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worldtree Publishing | Connecting You to a World of Illustration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap');
+    
+    body { font-family: 'Inter', sans-serif; overflow-x: hidden; width: 100%; }
+
+    /* --- HAMBURGER MENU --- */
+    .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background-color: white;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+        transition: right 0.3s ease;
+        z-index: 1000;
+        padding: 80px 30px 30px;
+    }
+
+    .mobile-menu.active {
+        right: 0;
+    }
+
+    .mobile-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 999;
+    }
+
+    .mobile-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .mobile-menu-link {
+        display: block;
+        padding: 15px 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #1e3a8a;
+        border-bottom: 1px solid #e5e7eb;
+        transition: color 0.2s;
+        text-decoration: none;
+    }
+
+    .mobile-menu-link:hover {
+        color: #1e40af;
+    }
+
+    .hamburger {
+        cursor: pointer;
+        z-index: 1001;
+        position: relative;
+    }
+
+    .close-menu {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 28px;
+        cursor: pointer;
+        color: #1e3a8a;
+        z-index: 1001;
+    }
+
+    /* --- NAVIGATION --- */
+    .nav-link { 
+        color: #1e3a8a;
+        font-weight: 600;
+        transition: color 0.2s;
+        text-decoration: none;
+    }
+    .nav-link:hover { 
+        color: #1e40af;
+    }
+
+    /* --- HERO SLIDER --- */
+    #slider-container { width: 100%; overflow: hidden; position: relative; }
+    #slider { display: flex; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+    .slide { min-width: 100%; height: 60vh; display: flex; justify-content: center; align-items: center; background-color: #fff; }
+    .slide img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* --- GLOBAL BUTTON STYLES --- */
+    .tag-btn, .gallery-action-btn {
+        transition-all duration-200 font-medium inline-block text-white border-none cursor-pointer;
+        color: white !important;
+    }
+
+    .tag-btn {
+        background-color: #9d9d9d; 
+        padding: 6px 14px;
+        font-size: 11px;
+        border-radius: 5px; 
+        text-transform: lowercase;
+        line-height: 1.2;
+    }
+    .tag-btn.active, .tag-btn:hover { background-color: #1e3a8a !important; color: white !important; }
+
+    .gallery-action-btn {
+        background-color: #b5b5b5;
+        padding: 6px 14px;
+        font-size: 10px;
+        border-radius: 4px;
+        line-height: 1;
+        text-transform: lowercase;
+    }
+    .gallery-action-btn:hover { background-color: #1e3a8a !important; color: white !important; }
+
+    .section-title { 
+        transition: color 0.2s;
+        cursor: pointer;
+        color: #374151;
+    }
+    .section-title:hover { color: #1e3a8a; }
+
+    /* --- GALLERY GRID --- */
+    .book-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+    .hero-large { grid-column: span 2; grid-row: span 2; }
+
+    .book-item { position: relative; overflow: hidden; background-color: #f8f8f8; }
+    .book-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s; }
+    
+    .overlay {
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        background: rgba(255, 255, 255, 0.9); 
+        padding: 10px 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .book-item:hover .overlay { opacity: 1; }
+    .book-item:hover img { transform: scale(1.05); }
+
+    /* --- NEWS SECTION --- */
+    .news-wrapper { background-color: #f2f2f2; position: relative; padding: 80px 20px; min-height: 250px; width: 100%; overflow: hidden; }
+    .news-content-area { width: 70%; margin: 0 auto; text-align: center; }
+    .news-slide { display: none; animation: slideFade 0.6s ease-in-out; }
+    .news-slide.active { display: block; }
+
+    .news-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 90px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-weight: 100;
+        user-select: none;
+        z-index: 20;
+        line-height: 1;
+    }
+    .news-arrow:hover { color: #1e3a8a; transform: translateY(-50%) scale(1.1); }
+    .arrow-left { left: 40px; }
+    .arrow-right { right: 40px; }
+
+    @keyframes slideFade {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- ARTISTS SECTION --- */
+    .artist-meet-btn {
+        background-color: #b5b5b5;
+        color: white !important;
+        padding: 8px 20px;
+        font-size: 11px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        text-transform: lowercase;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    .artist-meet-btn:hover {
+        background-color: #1e3a8a !important;
+        color: white !important;
+    }
+
+    .artist-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+
+    .artist-card {
+        position: relative;
+        cursor: pointer;
+        overflow: hidden;
+        border-radius: 50%;
+        aspect-ratio: 1/1;
+    }
+
+    .artist-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .artist-card:hover img {
+        transform: scale(1.1);
+    }
+
+    .artist-name {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 10px;
+        font-weight: 600;
+        text-align: center;
+        white-space: nowrap;
+        color: #333;
+    }
+
+    /* --- TEAM SECTION --- */
+    .team-photo-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+    }
+
+    .team-photo {
+        aspect-ratio: 1/1;
+        overflow: hidden;
+        background-color: #f0f0f0;
+    }
+
+    .team-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .team-photo:hover img {
+        transform: scale(1.1);
+    }
+
+    /* --- RESPONSIVENESS --- */
+    @media (max-width: 1024px) {
+        .book-grid { grid-template-columns: repeat(3, 1fr); }
+        .hero-large { grid-column: span 2; grid-row: span 2; }
+        .news-arrow { font-size: 70px; }
+        .artist-grid { grid-template-columns: repeat(3, 1fr); }
+        .team-photo-grid { grid-template-columns: repeat(5, 1fr); }
+        .news-content-area { width: 80%; }
+    }
+    
+    @media (max-width: 768px) {
+        .slide { height: 45vh; }
+        .news-wrapper { padding: 60px 15px; }
+        .news-content-area { width: 85%; }
+        .news-arrow { font-size: 50px; }
+        .arrow-left { left: 15px; }
+        .arrow-right { right: 15px; }
+        .artist-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        .artist-name {
+            font-size: 9px;
+            padding: 3px 10px;
+        }
+        .team-photo-grid { grid-template-columns: repeat(5, 1fr); gap: 3px; }
+        .book-grid { grid-template-columns: repeat(2, 1fr); }
+        .hero-large { grid-column: span 2; grid-row: span 2; }
+    }
+    
+    @media (max-width: 640px) { 
+        .slide { height: 35vh; }
+        .book-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .hero-large { grid-column: span 2; grid-row: span 2; }
+        .artist-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .artist-name {
+            font-size: 8px;
+            padding: 3px 8px;
+        }
+        .team-photo-grid { grid-template-columns: repeat(3, 1fr); gap: 2px; }
+        .news-wrapper { padding: 50px 10px; }
+        .news-arrow { font-size: 40px; }
+        .arrow-left { left: 10px; }
+        .arrow-right { right: 10px; }
+        h2 { font-size: 1.5rem !important; }
+        .tag-btn { font-size: 10px; padding: 5px 12px; }
+    }
+
+    @media (max-width: 480px) {
+        .news-content-area { width: 90%; }
+        .news-arrow { font-size: 35px; }
+        .news-slide p { font-size: 16px !important; }
+    }
+</style>
+</head>
+<body class="bg-white">
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <i class="fa-solid fa-times close-menu" onclick="toggleMobileMenu()"></i>
+        <nav class="flex flex-col">
+            <a href="index.html" class="mobile-menu-link">Home</a>
+            <a href="mission.html" class="mobile-menu-link">Mission</a>
+            <a href="vision.html" class="mobile-menu-link">Vision</a>
+            <a href="register.html" class="mobile-menu-link">Register</a>
+            <a href="login.html" class="mobile-menu-link">Login</a>
+        </nav>
+    </div>
+
+    <nav class="flex items-center justify-between px-4 md:px-10 py-4 border-b border-gray-100 sticky top-0 bg-white z-50">
+        <div class="flex items-center space-x-10">
+            <a href="/" class="flex items-center cursor-pointer">
+                <img 
+                    src="logo.png" 
+                    alt="Worldtree Publishing Logo" 
+                    class="h-8 md:h-10 w-auto object-contain"
+                />
+            </a>
+        </div>
+        
+        <!-- Desktop Navigation -->
+        <div class="hidden lg:flex space-x-8 text-[15px]">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="mission.html" class="nav-link">Mission</a>
+            <a href="vision.html" class="nav-link">Vision</a>
+            <a href="register.html" class="nav-link">Register</a>
+            <a href="login.html" class="nav-link">Login</a>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+            <div class="hidden md:flex flex-col items-end mr-2">
+                <span class="text-[10px] text-gray-400">1-646-808-0205 | Inquiries</span>
+            </div>
+            <i class="fa-solid fa-magnifying-glass text-[#1e3a8a] cursor-pointer"></i>
+            <i class="fa-solid fa-microphone text-gray-600 cursor-pointer hidden md:block"></i>
+            <i class="fa-regular fa-image text-[#1e3a8a] text-xl cursor-pointer hidden md:block"></i>
+            <i class="fa-solid fa-bars text-2xl text-[#1e3a8a] cursor-pointer hamburger lg:hidden" onclick="toggleMobileMenu()"></i>
+        </div>
+    </nav>
+
+   <div id="slider-container">
+    <div id="slider">
+        <div class="slide"><img src="https://cdn.pixabay.com/photo/2018/05/13/14/52/boys-3396713_1280.jpg" alt="Slide 1"></div>
+        <div class="slide"><img src="slide1.jpg" alt="Slide 2"></div>
+        <div class="slide"><img src="slide2.jpg" alt="Slide 3"></div>
+        <div class="slide"><img src="slide3.jpg" alt="Slide 3"></div>
+        <div class="slide"><img src="slide4.jpg" alt="Slide 4"></div>
+    </div>
+</div>
+
+    <section class="max-w-7xl mx-auto py-12 px-4 md:px-6">
+        <h2 class="text-center text-xl md:text-2xl lg:text-3xl font-light text-gray-800 mb-10 px-2"> Respect the Age of Nature as a part of culture and a work of art. Preview our US-based and International illustrators by style</h2>
+        <div id="style-tags" class="flex flex-wrap justify-center gap-2 max-w-5xl mx-auto">
+            <button class="tag-btn">3d / cgi rendering</button>
+            <button class="tag-btn">advertising</button>
+            <button class="tag-btn">black & white</button>
+            <button class="tag-btn active">book covers</button>
+            <button class="tag-btn">cartoon & humour</button>
+            <button class="tag-btn">comic</button>
+            <button class="tag-btn">editorial</button>
+            <button class="tag-btn">fashion</button>
+            <button class="tag-btn">food & drink</button>
+            <button class="tag-btn">lettering</button>
+            <button class="tag-btn" style="background-color: #666;">all illustration styles</button>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 md:px-6 pb-20 border-t pt-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+            <h3 class="text-xl font-normal section-title">Book Covers</h3>
+            <button class="gallery-action-btn">all book covers illustrators</button>
+        </div>
+
+        <div class="book-grid">
+    <div class="book-item hero-large">
+        <img src="https://covers.openlibrary.org/b/isbn/9780143039433-L.jpg" alt="Book Cover">
+        <div class="overlay" style="opacity: 1;"> 
+            <span class="font-bold text-[11px] uppercase">The Handmaid's Tale</span>
+            <i class="fa-regular fa-heart text-gray-500 cursor-pointer"></i>
+        </div>
+    </div>
+    <div class="book-item aspect-square">
+        <img src="https://covers.openlibrary.org/b/isbn/9780547928227-M.jpg" alt="Book Cover">
+        <div class="overlay"><span class="font-bold text-[11px]">The Hobbit</span><i class="fa-regular fa-heart text-gray-500"></i></div>
+    </div>
+    <div class="book-item aspect-square">
+        <img src="https://covers.openlibrary.org/b/isbn/9780735219090-M.jpg" alt="Book Cover">
+        <div class="overlay"><span class="font-bold text-[11px]">Where the Crawdads Sing</span><i class="fa-regular fa-heart text-gray-500"></i></div>
+    </div>
+    <div class="book-item aspect-square">
+        <img src="https://covers.openlibrary.org/b/isbn/9780316769488-M.jpg" alt="Book Cover">
+        <div class="overlay"><span class="font-bold text-[11px]">The Catcher in the Rye</span><i class="fa-regular fa-heart text-gray-500"></i></div>
+    </div>
+    <div class="book-item aspect-square">
+        <img src="https://covers.openlibrary.org/b/isbn/9780451524935-M.jpg" alt="Book Cover">
+        <div class="overlay"><span class="font-bold text-[11px]">1984</span><i class="fa-regular fa-heart text-gray-500"></i></div>
+    </div>
+</div>
+     <section class="max-w-7xl mx-auto py-12 px-4 md:px-6">
+        <h2 class="text-center text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-10 px-2"> BRINGING IDEAS TO LIFE THROUGH ILLUSTRATION:</h2>
+        </div> <h3>At Worldtree Publishing we specialize in high quality. creative illustrations that balance artistic excellence with practical budgets. Our team combi nes professional expertise with imaginative thinking, delivering artwork that is visually striking and meaningfully connects audiences. Whether you are a brand, publisher, or independent creator passionate about illustrations, we collaborate closely with you to transform your vision into compelling visuals that elevate your story and amplify its impact. </h3>
+        <div id="style-tags" class="flex flex-wrap justify-center gap-2 max-w-5xl mx-auto"> 
+
+        <div class="news-wrapper">
+            <div class="news-arrow arrow-left" onclick="manualNews(-1)">&#10094;</div>
+            <div class="news-arrow arrow-right" onclick="manualNews(1)">&#10095;</div></b>
+
+            <div class="news-content-area">
+                <div class="news-slide active">
+                    <p class="text-base md:text-lg lg:text-xl font-light text-gray-700 italic mb-3">"Working with Worldtree Publishing has been an absolute pleasure. Their book illustrations are top-notch, and everything from contract signing to delivery felt completely transparent and professional. I always feel confident recommending them."</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-tight">Jessica Marlowe</p>
+                </div>
+                <div class="news-slide">
+                    <p class="text-base md:text-lg lg:text-xl font-light text-gray-700 italic mb-3">"I can confidently say Worldtree Publishing is one of the most reliable publishing companies I've worked with. Their illustrations are stunning, pricing is fair, and every contract is legitimate and straightforward."</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-500 uppercase">Julian Moreno</p>
+                </div>
+                <div class="news-slide">
+                    <p class="text-base md:text-lg lg:text-xl font-light text-gray-700 italic mb-3">"Worldtree Publishing is a company you can truly rely on. The illustrations are of excellent quality, and I've never had a concern regarding contracts or payments. Signing with them feels completely secure."</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-500 uppercase">Natalie Brooks</p>
+                </div>
+                
+                <div class="news-slide">
+                    <p class="text-base md:text-lg lg:text-xl font-light text-gray-700 italic mb-3">"I've had the pleasure of purchasing illustrations from Worldtree Publishing multiple times. The work is consistent, the team is trustworthy, and every process, from pricing to signing, is smooth and legitimate"</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-500 uppercase">Clara Ramirez</p>
+                </div>
+
+                <div class="news-slide">
+                    <p class="text-base md:text-lg lg:text-xl font-light text-gray-700 italic mb-3">"Worldtree Publishing truly understands quality and professionalism. Their illustrations bring stories to life, and I always feel assured knowing every agreement is handled ethically and legitimately"</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-500 uppercase">Sophie Alvarado</p>
+                </div>
+
+                <div class="news-slide">
+                    <p class="text-base md:text-lg lg:text-xl font-light text-gray-700 italic mb-3">"Working with Worldtree Publishing has been a dream. From the moment I signed my first contract, I felt respected and supported. Their team values illustrators worldwide, and they are genuinely patient and attentive to every detail. Deadlines are treated seriously, but they also allow for thoughtful extensions when needed. I feel proud to be part of a company that treats art and artists with such care."</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-500 uppercase">Laura Mendes</p>
+                </div>
+
+                <div class="news-slide">
+                    <p class="text-base md:text-lg lg:text-xl font-light text-gray-700 italic mb-3">"Worldtree Publishing sets the standard for how a publishing company should treat artists. Their transparency, patience, and commitment to quality make every project smooth and rewarding. Signing with them was one of the best choices of my career, I feel proud to have my work published under their guidance."</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-500 uppercase">Felipe Santos</p>
+                </div>
+
+                <div class="news-slide">
+                    <p class="text-base md:text-lg lg:text-xl font-light text-gray-700 italic mb-3">"Worldtree Publishing makes every illustrator feel like a valued partner. Their contracts are clear, their deadlines fair, and their support is constant. It's rare to find a company so trustworthy and artist-friendly, I appreciate Worldtree Publishing's dedication to helping illustrators succeed. Every project is handled carefully, and every team member is patient and professional. They make working with them easy and inspiring."</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-500 uppercase">Carlos Menezes</p>
+                </div>
+
+                <div class="news-slide">
+                    <p class="text-base md:text-lg lg:text-xl font-light text-gray-700 italic mb-3">"The experience of working with Worldtree Publishing has been seamless and encouraging. This is a company that truly understands and supports artists. Working with them is a delight for any illustrator. Worldtree Publishing has a remarkable team, organization, and committed to helping illustrators thrive. Their professionalism is unmatched"</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-500 uppercase">Luiza Nascimento</p>
+                </div>
+
+                <div class="mt-10">
+                    <button class="gallery-action-btn">see all</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <h2><b>DEDICATED & GLOBAL TEAM:</b></h2>
+    <h3>Our experienced, passionate team delivers personalized support and professional guidance. We value clear, respectful communication, especially with independent illustrators across the globe.
+
+All collaborators follow our internal policies and project guidelines, with full transparency regarding payment structures, project approvals, and creative processes.</h3>
+
+
+    <!-- ARTISTS SECTION -->
+    <section class="max-w-7xl mx-auto px-4 md:px-6 pb-20">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Left Column: Text -->
+            <div class="lg:w-1/3">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">ARTISTS</h3>
+                <p class="text-sm leading-relaxed text-gray-700 mb-4">
+                    Discover the stories behind the work; find, follow and collaborate with the finest contemporary artists from every corner of the globe.
+                </p>
+                <p class="text-sm leading-relaxed text-gray-700 mb-6">
+                    We're home to a curated collection of the world's greatest illustrators, so whichever style, approach or medium you are looking for, you'll find it—along with lots of ideas and inspiration here.
+                </p>
+                <button class="artist-meet-btn">meet all</button>
+            </div>
+
+            <!-- Right Column: Artist Grid -->
+            <div class="lg:w-2/3">
+                <div class="artist-grid">
+                    <div class="artist-card">
+                        <img src="Margaret Collins.jpg" alt="Margaret Collins">
+                        <div class="artist-name">Magaret Collins</div>
+                    </div>
+                    <div class="artist-card">
+                        <img src="Diane Mitchell.jpg" alt="Diane Mitchell">
+                        <div class="artist-name">Diane Mitchell</div>
+                    </div>
+                    <div class="artist-card">
+                        <img src="Michael Ethan.jpg" alt="Michael Ethan">
+                        <div class="artist-name">Michael Ethan</div>
+                    </div>
+                    <div class="artist-card">
+                        <img src="Michael Reed.jpg" alt="Colin Hare">
+                        <div class="artist-name">Michael Reed</div>
+                    </div>
+                    <div class="artist-card">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop" alt="Donough O'Malley">
+                        <div class="artist-name">Donough O'Malley</div>
+                    </div>
+                    <div class="artist-card">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop" alt="Victoria Foresta">
+                        <div class="artist-name">Victoria Foresta</div>
+                    </div>
+                    <div class="artist-card">
+                        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=400&fit=crop" alt="FangFang Han">
+                        <div class="artist-name">FangFang Han</div>
+                    </div>
+                    <div class="artist-card">
+                        <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop" alt="Lily Aiston">
+                        <div class="artist-name">Lily Aiston</div>
+                    </div>
+                    <div class="artist-card">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop" alt="Patrick Boyer">
+                        <div class="artist-name">Patrick Boyer</div>
+                    </div>
+                    <div class="artist-card">
+                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop" alt="Butcher Billy">
+                        <div class="artist-name">Butcher Billy</div>
+                    </div>
+                    <div class="artist-card">
+                        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop" alt="Dalila Lin">
+                        <div class="artist-name">Dalila Lin</div>
+                    </div>
+                    <div class="artist-card">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop" alt="Andrea Del Hoyo">
+                        <div class="artist-name">Andrea Del Hoyo</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<h2><b> STYLES & COLLABORATION</b></h2>
+<h3>Every project involves careful coordination, creative dialogue, and structured feedback. From concept development to final delivery, our process ensures consistency, quality, and alignment with your vision.</h3>
+<h2><b>EXPERIENCE-DRIVEN ILLUSTRATION:</b></h2>
+
+<h3>We believe every piece of art enhances the user experience. By understanding your audience, we create custom artwork that is visually compelling and strategically aligned.
+Our transparent, collaborative process guarantees results that meet creative and professional standards.</h3>
+
+
+
+    <!-- ANIMATION SECTION -->
+    <section class="bg-[#e8e6e0] py-16 px-4 md:px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col lg:flex-row gap-8 lg:gap-12">
+                <!-- Left Column: Video -->
+                <div class="lg:w-3/5">
+                    <div class="bg-white p-4 shadow-sm">
+                        <video 
+                            class="w-full h-auto"
+                            controls
+                            poster="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=450&fit=crop"
+                        >
+                            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+
+                <!-- Right Column: Text Content -->
+                <div class="lg:w-2/5">
+                    <div class="mb-4">
+                        <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">ANIMATION</p>
+                        <h2 class="text-2xl md:text-3xl lg:text-4xl font-light text-gray-900 mb-6">It moves . . .</h2>
+                    </div>
+                    
+                    <div class="space-y-4 text-sm leading-relaxed text-gray-700">
+                        <p>
+                            Many of our illustrators are also animators, from gifs and explainers to tv and outdoor.
+                        </p>
+                        <p>
+                            You can view their animations in the individual portfolios. To browse all the animation portfolios, just use the Animation filter.
+                        </p>
+                        <p>
+                            Only looking for animation? Why not check out our sister site at:<br>
+                            <a href="#" class="text-[#1e3a8a] hover:underline font-medium">www.animationx.com</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<h2><b>OUR BEST ILLUSTRATION PORTFOLIO:</b></h2>
+<h3>Explore a diverse portfolio of editorial illustrations, children’s book artwork, branding visuals, comic art, product concepts, and more. Each project reflects our illustrators’ attention to detail, expert use of color, and adaptability across styles from cartoon and abstract to hyper-realistic.
+We have successfully collaborated with brands, publishers, and individual creators, all expressing high satisfaction with our services.
+Available 24/5, our team is always ready to assist with project needs, communication, and creative coordination.</h3>
+<h2><b>OUR DUTIES:</b></h2>
+<h3>We provide custom packages based on complexity, timeline, and revision needs no hidden files or confusing contracts.</h3>
+<h2><b>A PARTNER, NOT JUST A PROVIDER:</b></h2>
+<h3>We understand the importance of deadlines. Our streamlined workflow delivers high-quality illustrations on time, even for tight schedules. Every project is a collaboration: your vision + our expertise = art that exceeds expectations.</h3>
+    <!-- TEAM SECTION -->
+    <section class="bg-white py-16 px-4 md:px-6 relative overflow-hidden">
+        <!-- Background Map Image -->
+        <div class="absolute right-0 top-0 bottom-0 w-1/2 opacity-10 hidden lg:block">
+            <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=800&h=800&fit=crop" 
+                 alt="World Map" 
+                 class="w-full h-full object-cover">
+        </div>
+
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="flex flex-col lg:flex-row gap-8 lg:gap-12">
+                <!-- Left Column: Team Grid -->
+                <div class="lg:w-2/5">
+                    <div class="team-photo-grid">
+                        <div class="team-photo"><img src="Margaret Collins.jpg" alt="Team member"></div>
+                        <div class="team-photo"><img src="Michael Ethan.jpg" alt="Team member"></div>
+                        <div class="team-photo"><img src="Michael Reed.jpg" alt="Team member"></div>
+                        <div class="team-photo"><img src="Diane Mitchell.jpg" alt="Team member"></div>
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=200&h=200&fit=crop" alt="Team member"></div>
+                        
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop" alt="Team member"></div>
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop" alt="Team member"></div>
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" alt="Team member"></div>
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop" alt="Team member"></div>
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop" alt="Team member"></div>
+                        
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop" alt="Team member"></div>
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop" alt="Team member"></div>
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&h=200&fit=crop" alt="Team member"></div>
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop" alt="Team member"></div>
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop" alt="Team member"></div>
+                        
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1553514029-1318c9127859?w=200&h=200&fit=crop" alt="Team member"></div>
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?w=200&h=200&fit=crop" alt="Team member"></div>
+                        <div class="team-photo"><img src="lindsay.jpeg" alt="Team member"></div>
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1557862921-37829c790f19?w=200&h=200&fit=crop" alt="Team member"></div>
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?w=200&h=200&fit=crop" alt="Team member"></div>
+                        
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=200&h=200&fit=crop" alt="Team member"></div>
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1546539782-6fc531453083?w=200&h=200&fit=crop" alt="Team member"></div>
+                        <div class="team-photo"><img src="https://images.unsplash.com/photo-1601455763557-db1bea8a9a5a?w=200&h=200&fit=crop" alt="Team member"></div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Text Content -->
+                <div class="lg:w-3/5 lg:pl-12">
+                    <div class="mb-6">
+                        <p class="text-xs uppercase tracking-widest text-gray-500 mb-3">TEAM</p>
+                        <h2 class="text-2xl md:text-3xl lg:text-4xl font-light text-gray-900 mb-6 leading-tight">
+                            Four continents, eight countries, one agency
+                        </h2>
+                    </div>
+                    
+                    <div class="space-y-4 text-sm leading-relaxed text-gray-700 mb-6">
+                        <p>
+                            Wherever you are in the world, Worldtree Publishing is ready to help you find the right artist for your project and to see that everything goes smoothly with your commission.
+                        </p>
+                        <p>
+                            Every office in our global network provides you with local agents ready to provide you with expert advice and guidance about artists, styles and market trends.
+                        </p>
+                        <p>
+                            And because Worldtree Publishing operates in four continents and eight countries, we are often the first to spot emerging talent wherever it pops up. It's all about connecting you to a world of illustration and animation, giving you a real edge and an unrivalled choice and variety. Be inspired!
+                        </p>
+                    </div>
+                    
+                    <button class="gallery-action-btn">see more</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10M TREES SECTION -->
+    <section class="bg-[#f8f8f8] py-16 px-4 md:px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-stretch">
+                <!-- Left Column: Image -->
+                <div class="lg:w-1/2">
+                    <div class="h-full min-h-[300px]">
+                        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&h=800&fit=crop" 
+                             alt="Woman in forest" 
+                             class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <!-- Right Column: Content -->
+                <div class="lg:w-1/2 flex flex-col justify-between">
+                    <div>
+                        <div class="mb-6">
+                            <p class="text-xs uppercase tracking-widest text-gray-500 mb-3">10M TREES</p>
+                            <h2 class="text-2xl md:text-3xl lg:text-4xl font-light text-gray-900 mb-6 leading-tight">
+                                Working together to combat global warming
+                            </h2>
+                        </div>
+                        
+                        <div class="space-y-4 text-sm leading-relaxed text-gray-700 mb-8">
+                            <p>
+                                Every time you commission one of our illustrators or animators, you are not only benefitting from outstanding artistic talent, you're also helping to create a healthier planet and to alleviate global poverty.
+                            </p>
+                            <p>
+                                <strong>In 2011</strong> Worldtree Publishing began donating 1% of its turnover to systematic growing and protecting trees, to help reverse the rated of global warming. <strong>In 2018 we passed the 1 million trees milestone.</strong> Our target is now set firmly on protecting a total of <strong>10 million trees in Zambia and the Ethiopian Rift Valley.</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Trees Badge and Donation Section -->
+                    <div class="mt-8">
+                        <div class="flex flex-col sm:flex-row items-start gap-6 mb-6">
+                            <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=150&h=150&fit=crop" 
+                                 alt="10 Million Trees Badge" 
+                                 class="w-24 h-24 sm:w-32 sm:h-32 object-contain">
+                            <div class="flex-1 w-full">
+                                <div class="bg-white p-4 shadow-sm">
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <span class="text-xl sm:text-2xl font-bold text-gray-900">2,248,240</span>
+                                    </div>
+                                    <div class="bg-green-500 h-2 rounded-full mb-2">
+                                        <div class="bg-green-600 h-2 rounded-full" style="width: 22.5%;"></div>
+                                    </div>
+                                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                                        <span class="text-xs text-gray-600 uppercase">Trees Growing since December 2011</span>
+                                        <button class="gallery-action-btn text-xs px-3 py-1">More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grow a Tree Section -->
+                        <div class="bg-white p-4 sm:p-6 shadow-sm">
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                <div class="flex items-start gap-3 flex-1">
+                                    <div class="text-2xl sm:text-3xl">🌳</div>
+                                    <div>
+                                        <h3 class="text-lg sm:text-xl font-light text-gray-900 mb-1">Grow a tree for 50¢</h3>
+                                        <p class="text-xs text-gray-600">
+                                            Use our preferential partner rate to plant your own trees (your contribution goes direct to WeForest).
+                                        </p>
+                                    </div>
+                                </div>
+                                <button class="gallery-action-btn">More</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership Section -->
+<section class="py-16 bg-gray-50 overflow-hidden">
+  <div class="max-w-6xl mx-auto px-4">
+    
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
+      Worldtree Publishing Leadership Triad
+    </h2>
+
+    <div class="relative">
+      
+      <!-- Carousel Track -->
+      <div id="leadershipCarousel" class="flex transition-transform duration-700 ease-in-out">
+
+        <!-- Member 1 -->
+        <div class="min-w-full flex justify-center">
+          <div class="bg-white shadow-xl rounded-2xl p-8 max-w-lg text-center">
+            <img src="reed.jpeg"
+              class="w-32 h-32 mx-auto rounded-full object-cover mb-6 border-4 border-gray-100"
+              alt="Michael Reed">
+            <h3 class="text-xl font-semibold">Michael Reed</h3>
+            <p class="text-sm text-gray-500 mb-4">Project Director</p>
+            <p class="text-gray-600 text-sm md:text-base leading-relaxed">
+              The Project Director serves as the chief visionary, guiding the company’s strategic direction and overseeing all publishing initiatives. With a focus on innovation, operational excellence, and long-term growth, he ensures that every project aligns with Worldtree Publishing’s standards and creative ambitions.
+            </p>
+          </div>
+        </div>
+
+        <!-- Member 2 -->
+        <div class="min-w-full flex justify-center">
+          <div class="bg-white shadow-xl rounded-2xl p-8 max-w-lg text-center">
+            <img src="Michael Ethan.jpg"
+              class="w-32 h-32 mx-auto rounded-full object-cover mb-6 border-4 border-gray-100"
+              alt="Michael Ethan">
+            <h3 class="text-xl font-semibold">Michael Ethan</h3>
+            <p class="text-sm text-gray-500 mb-4">Assistant Project Director</p>
+            <p class="text-gray-600 text-sm md:text-base leading-relaxed">
+              Michael Ethan bridges vision and execution. He leads day-to-day operations, coordinates creative teams, and ensures that projects uphold editorial integrity. Known for his collaborative approach, he fosters an environment where creativity thrives while strategic goals are achieved.
+            </p>
+          </div>
+        </div>
+
+        <!-- Member 3 -->
+        <div class="min-w-full flex justify-center">
+          <div class="bg-white shadow-xl rounded-2xl p-8 max-w-lg text-center">
+            <img src="lindsay.jpeg"
+              class="w-32 h-32 mx-auto rounded-full object-cover mb-6 border-4 border-gray-100"
+              alt="Lindsay Hamilton">
+            <h3 class="text-xl font-semibold">Lindsay Hamilton</h3>
+            <p class="text-sm text-gray-500 mb-4">Co-Directed Manager</p>
+            <p class="text-gray-600 text-sm md:text-base leading-relaxed">
+              Lindsay Hamilton supports both directors in managing resources, optimizing workflows, and maintaining quality control throughout each project lifecycle. By balancing operational efficiency with creative flexibility, she ensures smooth execution and successful delivery of every publishing initiative.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Navigation Dots -->
+      <div class="flex justify-center mt-8 space-x-3">
+        <button class="lead-dot w-3 h-3 rounded-full bg-gray-400"></button>
+        <button class="lead-dot w-3 h-3 rounded-full bg-gray-300"></button>
+        <button class="lead-dot w-3 h-3 rounded-full bg-gray-300"></button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+    <!-- BROWSE BY STYLE SECTION -->
+    <section class="bg-white py-16 px-4 md:px-6 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-center text-xl md:text-2xl font-light text-gray-800 mb-8">Browse by style / categories / media</h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 md:gap-x-8 gap-y-2 text-center">
+                <div class="space-y-1">
+                    <p class="text-xs text-gray-600">3D / CGI Rendering</p>
+                    <p class="text-xs text-gray-600">Advertising</p>
+                    <p class="text-xs text-gray-600">Animals</p>
+                    <p class="text-xs text-gray-600">Animation</p>
+                    <p class="text-xs text-gray-600">Anime</p>
+                    <p class="text-xs text-gray-600">Architectural</p>
+                    <p class="text-xs text-gray-600">Beauty</p>
+                    <p class="text-xs text-gray-600">Black & White</p>
+                    <p class="text-xs text-gray-600">Book Covers</p>
+                    <p class="text-xs text-gray-600">Botanical</p>
+                    <p class="text-xs text-gray-600">Cartoons & Humor</p>
+                    <p class="text-xs text-gray-600">Caricature</p>
+                    <p class="text-xs text-gray-600">Children</p>
+                    <p class="text-xs text-gray-600">Collage & Montage</p>
+                    <p class="text-xs text-gray-600">Colouring Book</p>
+                    <p class="text-xs text-gray-600">Comic</p>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-xs text-gray-600">Conceptual</p>
+                    <p class="text-xs text-gray-600">Cute</p>
+                    <p class="text-xs text-gray-600">Decorative</p>
+                    <p class="text-xs text-gray-600">Editorial</p>
+                    <p class="text-xs text-gray-600">Educational</p>
+                    <p class="text-xs text-gray-600">Fantasy</p>
+                    <p class="text-xs text-gray-600">Fashion</p>
+                    <p class="text-xs text-gray-600">Fashion Line</p>
+                    <p class="text-xs text-gray-600">Food & Drink</p>
+                    <p class="text-xs text-gray-600">Gaming</p>
+                    <p class="text-xs text-gray-600">Gifts</p>
+                    <p class="text-xs text-gray-600">Graphic</p>
+                    <p class="text-xs text-gray-600">Historical</p>
+                    <p class="text-xs text-gray-600">Icon</p>
+                    <p class="text-xs text-gray-600">Infographic</p>
+                    <p class="text-xs text-gray-600">Inside Influences</p>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-xs text-gray-600">Jewellery</p>
+                    <p class="text-xs text-gray-600">Lettering</p>
+                    <p class="text-xs text-gray-600">Lifestyle</p>
+                    <p class="text-xs text-gray-600">Line</p>
+                    <p class="text-xs text-gray-600">Live Event Drawing</p>
+                    <p class="text-xs text-gray-600">Loose</p>
+                    <p class="text-xs text-gray-600">Maps</p>
+                    <p class="text-xs text-gray-600">Medical</p>
+                    <p class="text-xs text-gray-600">Pattern</p>
+                    <p class="text-xs text-gray-600">New Talent</p>
+                    <p class="text-xs text-gray-600">Packaging</p>
+                    <p class="text-xs text-gray-600">Painterly</p>
+                    <p class="text-xs text-gray-600">Paper Art</p>
+                    <p class="text-xs text-gray-600">Posters</p>
+                    <p class="text-xs text-gray-600">People</p>
+                    <p class="text-xs text-gray-600">Photorealistic</p>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-xs text-gray-600">Places & Locations</p>
+                    <p class="text-xs text-gray-600">Pop</p>
+                    <p class="text-xs text-gray-600">Portraits</p>
+                    <p class="text-xs text-gray-600">Retro</p>
+                    <p class="text-xs text-gray-600">Seek & Find</p>
+                    <p class="text-xs text-gray-600">Sport & Fitness</p>
+                    <p class="text-xs text-gray-600">Storyboard</p>
+                    <p class="text-xs text-gray-600">Street Art & Mural</p>
+                    <p class="text-xs text-gray-600">Technical</p>
+                    <p class="text-xs text-gray-600">Vector</p>
+                    <p class="text-xs text-gray-600">Watercolour</p>
+                    <p class="text-xs text-gray-600">Whimsical & Storytelling</p>
+                    <p class="text-xs text-gray-600">Young Adult</p>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <h3 class="text-lg md:text-xl font-light text-gray-800 mb-6">animation styles / categories / media</h3>
+                <div class="flex flex-wrap justify-center gap-4 md:gap-12 text-xs text-gray-600">
+                    <p>Children</p>
+                    <p>GIFs</p>
+                    <p>Explainers</p>
+                    <p>Motion Graphics</p>
+                    <p>2D</p>
+                    <p>3D</p>
+                    <p>Stop-Frame</p>
+                    <p>Animated / animation by others</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#1e3a8a] text-white py-12 px-4 md:px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                <!-- Column 1: Logo & Contact -->
+                <div>
+                    <div class="mb-6">
+                        <h2 class="text-xl font-black tracking-tighter leading-none mb-1">
+                            WORLDTREE<span class="text-white"> PUBLISHING</span>
+                        </h2>
+                        <p class="text-[8px] uppercase tracking-widest text-gray-300">Connecting You to a World of Illustration</p>
+                    </div>
+                    <div class="text-xs space-y-2 text-gray-200">
+                        <p class="font-semibold">Illustration agency</p>
+                        <p>New York, USA</p>
+                        <p class="mt-4">hello@worldtreepublishing.com</p>
+                        <p>t: 646-808-0205</p>
+                    </div>
+                </div>
+
+                <!-- Column 2: We're Vetted -->
+                <div class="flex flex-col items-start">
+                    <div class="mb-4">
+                        <i class="fa-solid fa-shield-halved text-4xl md:text-5xl text-white mb-3"></i>
+                        <h3 class="text-sm font-bold mb-2">We're vetted and trusted by our clients</h3>
+                        <p class="text-xs text-gray-200 leading-relaxed">
+                            Our clients consistently rate us highly for our professional service and quality of artists
+                        </p>
+                        <a href="#" class="text-xs text-white underline hover:text-gray-200 mt-2 inline-block">
+                            Tell us more
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Column 3: For the Planet -->
+                <div class="flex flex-col items-start">
+                    <div class="mb-4">
+                        <i class="fa-solid fa-earth-americas text-4xl md:text-5xl text-white mb-3"></i>
+                        <h3 class="text-sm font-bold mb-2">For the planet<br>for every commission</h3>
+                        <p class="text-xs text-gray-200 leading-relaxed">
+                            We're committed to planting and protecting 10m trees in developing countries
+                        </p>
+                        <a href="#" class="text-xs text-white underline hover:text-gray-200 mt-2 inline-block">
+                            See 10m tree Target
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Column 4: Newsletter & Social -->
+                <div>
+                    <h3 class="text-sm font-bold mb-4">Follow us:</h3>
+                    <div class="flex gap-4 mb-6">
+                        <i class="fa-brands fa-pinterest text-xl cursor-pointer hover:text-gray-200 transition-colors"></i>
+                        <i class="fa-brands fa-facebook text-xl cursor-pointer hover:text-gray-200 transition-colors"></i>
+                        <i class="fa-brands fa-twitter text-xl cursor-pointer hover:text-gray-200 transition-colors"></i>
+                        <i class="fa-brands fa-linkedin text-xl cursor-pointer hover:text-gray-200 transition-colors"></i>
+                        <i class="fa-brands fa-instagram text-xl cursor-pointer hover:text-gray-200 transition-colors"></i>
+                    </div>
+                    <div class="mb-4">
+                        <p class="text-xs mb-3">See how others use illustration<br>by subscribing to our free newsletter</p>
+                        <div class="flex gap-2">
+                            <input type="email" placeholder="Email" class="flex-1 px-3 py-2 text-xs bg-white/20 border-none rounded text-white placeholder-gray-300">
+                            <button class="gallery-action-btn px-4 py-2 text-xs">GO</button>
+                        </div>
+                    </div>
+                    <div class="bg-white/20 text-white text-center py-2 px-4 text-xs font-bold rounded">
+                        TOP 20 - JANUARY 2025<br>
+                        The monthly pick of the best
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom Links -->
+            <div class="border-t border-white/20 pt-6 mt-8">
+                <div class="flex flex-col md:flex-row flex-wrap justify-between items-center gap-4 text-xs text-gray-300">
+                    <p>© Worldtree Publishing Inc 1997 - 2025</p>
+                    <div class="flex flex-wrap justify-center gap-4 md:gap-6">
+                        <a href="#" class="hover:text-white">Website terms</a>
+                        <a href="#" class="hover:text-white">Trading terms</a>
+                        <a href="#" class="hover:text-white">Privacy policy</a>
+                        <a href="#" class="hover:text-white">SAA Member</a>
+                        <a href="#" class="hover:text-white">Artists login</a>
+                    </div>
+                    <p class="text-gray-400">website design by Bluefoot</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('mobileOverlay');
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Hero Slider
+        const slider = document.getElementById('slider');
+        let heroIdx = 0;
+        setInterval(() => {
+            heroIdx = (heroIdx + 1) % 3;
+            slider.style.transform = `translateX(-${heroIdx * 100}%)`;
+        }, 5000);
+
+        // Tag Buttons
+        const tagButtons = document.querySelectorAll('.tag-btn');
+        tagButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                tagButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Heart Icons
+        document.querySelectorAll('.fa-heart').forEach(heart => {
+            heart.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('fa-solid');
+                this.classList.toggle('text-red-500');
+                this.classList.toggle('fa-regular');
+            });
+        });
+
+        // News Slider
+        let newsIdx = 0;
+        const newsSlides = document.querySelectorAll('.news-slide');
+        let newsTimer;
+
+        function showNewsSlide(n) {
+            newsSlides.forEach(slide => slide.classList.remove('active'));
+            newsIdx = (n + newsSlides.length) % newsSlides.length;
+            newsSlides[newsIdx].classList.add('active');
+        }
+
+        function autoMoveNews() {
+            newsTimer = setInterval(() => { showNewsSlide(newsIdx + 1); }, 6000);
+        }
+
+        function manualNews(n) {
+            clearInterval(newsTimer);
+            showNewsSlide(newsIdx + n);
+            autoMoveNews();
+        }
+
+        autoMoveNews();
+
+        const leadershipCarousel = document.getElementById("leadershipCarousel");
+  const leadDots = document.querySelectorAll(".lead-dot");
+  let leadIndex = 0;
+
+  function showLeadershipMember(i) {
+    leadershipCarousel.style.transform = `translateX(-${i * 100}%)`;
+    leadDots.forEach(dot => dot.classList.replace("bg-gray-400", "bg-gray-300"));
+    leadDots[i].classList.replace("bg-gray-300", "bg-gray-400");
+  }
+
+  leadDots.forEach((dot, i) => {
+    dot.addEventListener("click", () => {
+      leadIndex = i;
+      showLeadershipMember(leadIndex);
+    });
+  });
+
+  // Auto Rotation
+  setInterval(() => {
+    leadIndex = (leadIndex + 1) % leadDots.length;
+    showLeadershipMember(leadIndex);
+  }, 5000);
+        
+    </script>
+
+<!-- Begin of Chaport Live Chat code -->
+<script type="text/javascript">
+(function(w,d,v3){
+w.chaportConfig = {
+  appId : '6984ad771d1ca94a1cab1154',
+};
+
+if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push(arguments)};v3.on=function(e,fn){if(!v3._l[e])v3._l[e]=[];v3._l[e].push(fn)};var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://app.chaport.com/javascripts/insert.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss)})(window, document);
+</script>
+<!-- End of Chaport Live Chat code -->
+
+</body>
+</html>

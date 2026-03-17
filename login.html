@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Worldtree Publishing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        :root {
+            --navy-blue: #001f3f;
+            --navy-light: #003d7a;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--navy-blue) 0%, var(--navy-light) 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+        <!-- Logo and Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full shadow-lg mb-4">
+                <i class="fas fa-university text-3xl" style="color: var(--navy-blue);"></i>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Worldtree Publishing</h1>
+            <p class="text-white text-opacity-90">Welcome back! Please login to your account</p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="bg-white rounded-2xl shadow-2xl p-8">
+            <!-- Progress Indicator -->
+            <div class="flex items-center justify-center mb-8">
+                <div class="flex items-center">
+                    <div id="step1-indicator" class="w-10 h-10 rounded-full text-white flex items-center justify-center font-bold transition-all" style="background-color: var(--navy-blue);">
+                        1
+                    </div>
+                    <div class="w-16 h-1 bg-gray-200 mx-2">
+                        <div id="progress-bar" class="h-full transition-all duration-300" style="width: 0%; background-color: var(--navy-blue);"></div>
+                    </div>
+                    <div id="step2-indicator" class="w-10 h-10 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center font-bold transition-all">
+                        2
+                    </div>
+                </div>
+            </div>
+
+            <form id="login-form">
+                <!-- Step 1: Email -->
+                <div id="step-1" class="step active">
+                    <div class="text-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Enter your email</h2>
+                        <p class="text-gray-500 text-sm">We'll check if you have an account</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-envelope mr-2" style="color: var(--navy-blue);"></i>Email Address
+                        </label>
+                        <input 
+                            type="email" 
+                            id="email-input" 
+                            required 
+                            autocomplete="email"
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 transition outline-none text-lg"
+                            style="--tw-ring-color: var(--navy-blue);"
+                            onblur="this.style.borderColor = ''; this.style.boxShadow = '';"
+                            onfocus="this.style.borderColor = 'var(--navy-blue)'; this.style.boxShadow = '0 0 0 3px rgba(0, 31, 63, 0.1)';"
+                            placeholder="Enter your email">
+                        <p id="email-error" class="text-red-500 text-sm mt-2 hidden"></p>
+                    </div>
+
+                    <button 
+                        type="button" 
+                        onclick="goToStep2()" 
+                        class="w-full text-white py-3 rounded-lg transition font-semibold text-lg flex items-center justify-center"
+                        style="background-color: var(--navy-blue);"
+                        onmouseover="this.style.backgroundColor='var(--navy-light)'" 
+                        onmouseout="this.style.backgroundColor='var(--navy-blue)'">
+                        Next
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- Step 2: Password -->
+                <div id="step-2" class="step">
+                    <div class="text-center mb-6">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-3" style="background-color: rgba(0, 31, 63, 0.1);">
+                            <i class="fas fa-user text-2xl" style="color: var(--navy-blue);"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-1">Welcome back!</h2>
+                        <p class="text-gray-600 text-sm" id="user-email-display"></p>
+                        <button 
+                            type="button" 
+                            onclick="goToStep1()" 
+                            class="text-sm hover:underline mt-1"
+                            style="color: var(--navy-blue);">
+                            Not you?
+                        </button>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-lock mr-2" style="color: var(--navy-blue);"></i>Password
+                        </label>
+                        <div class="relative">
+                            <input 
+                                type="password" 
+                                id="password-input" 
+                                required
+                                autocomplete="current-password"
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 transition outline-none text-lg pr-12"
+                                style="--tw-ring-color: var(--navy-blue);"
+                                onblur="this.style.borderColor = ''; this.style.boxShadow = '';"
+                                onfocus="this.style.borderColor = 'var(--navy-blue)'; this.style.boxShadow = '0 0 0 3px rgba(0, 31, 63, 0.1)';"
+                                placeholder="Enter your password">
+                            <button 
+                                type="button" 
+                                onclick="togglePassword()" 
+                                class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-eye" id="password-toggle-icon"></i>
+                            </button>
+                        </div>
+                        <p id="password-error" class="text-red-500 text-sm mt-2 hidden"></p>
+                    </div>
+
+                    <div class="flex items-center justify-between mb-6">
+                        <label class="flex items-center">
+                            <input type="checkbox" id="remember-me" class="w-4 h-4 rounded focus:ring-2" style="color: var(--navy-blue); --tw-ring-color: var(--navy-blue);">
+                            <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                        </label>
+                        <a href="#" class="text-sm hover:underline" style="color: var(--navy-blue);">Forgot password?</a>
+                    </div>
+
+                    <button 
+                        type="submit" 
+                        id="login-btn"
+                        class="w-full text-white py-3 rounded-lg transition font-semibold text-lg flex items-center justify-center"
+                        style="background-color: var(--navy-blue);"
+                        onmouseover="this.style.backgroundColor='var(--navy-light)'" 
+                        onmouseout="this.style.backgroundColor='var(--navy-blue)'">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Login
+                    </button>
+
+                    <button 
+                        type="button" 
+                        onclick="goToStep1()" 
+                        class="w-full mt-3 bg-gray-100 text-gray-700 py-3 rounded-lg hover:bg-gray-200 transition font-semibold flex items-center justify-center">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Back
+                    </button>
+                </div>
+            </form>
+
+            <!-- Footer -->
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-500">
+                    Don't have an account? 
+                    <a href="register.html" class="hover:underline font-semibold" style="color: var(--navy-blue);">Sign up</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Security Notice -->
+        <div class="mt-6 text-center">
+            <p class="text-white text-opacity-75 text-xs flex items-center justify-center">
+                <i class="fas fa-shield-alt mr-2"></i>
+                Your information is secure and encrypted
+            </p>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <script>
+        let userEmail = '';
+        let userAccountNumber = '';
+
+        // Go to step 2
+        function goToStep2() {
+            const email = document.getElementById('email-input').value.trim();
+            const emailError = document.getElementById('email-error');
+            
+            if (!email) {
+                emailError.textContent = 'Please enter your email address';
+                emailError.classList.remove('hidden');
+                return;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                emailError.textContent = 'Please enter a valid email address';
+                emailError.classList.remove('hidden');
+                return;
+            }
+
+            emailError.classList.add('hidden');
+
+            // Check if user exists
+            database.ref('users').orderByChild('email').equalTo(email).once('value', (snapshot) => {
+                const users = snapshot.val();
+                
+                if (!users) {
+                    emailError.textContent = 'No account found with this email. Please sign up.';
+                    emailError.classList.remove('hidden');
+                    return;
+                }
+
+                // Get user account number
+                userAccountNumber = Object.keys(users)[0];
+                userEmail = email;
+
+                // Update UI
+                document.getElementById('user-email-display').textContent = email;
+                
+                // Switch to step 2
+                document.getElementById('step-1').classList.remove('active');
+                document.getElementById('step-2').classList.add('active');
+                
+                // Update progress
+                document.getElementById('progress-bar').style.width = '100%';
+                document.getElementById('step1-indicator').style.backgroundColor = '#10b981';
+                document.getElementById('step1-indicator').innerHTML = '<i class="fas fa-check"></i>';
+                document.getElementById('step2-indicator').classList.remove('bg-gray-200', 'text-gray-400');
+                document.getElementById('step2-indicator').classList.add('text-white');
+                document.getElementById('step2-indicator').style.backgroundColor = 'var(--navy-blue)';
+
+                // Focus on password input
+                setTimeout(() => {
+                    document.getElementById('password-input').focus();
+                }, 300);
+            });
+        }
+
+        // Go back to step 1
+        function goToStep1() {
+            document.getElementById('step-2').classList.remove('active');
+            document.getElementById('step-1').classList.add('active');
+            
+            // Reset progress
+            document.getElementById('progress-bar').style.width = '0%';
+            document.getElementById('step1-indicator').style.backgroundColor = 'var(--navy-blue)';
+            document.getElementById('step1-indicator').textContent = '1';
+            document.getElementById('step2-indicator').classList.remove('text-white');
+            document.getElementById('step2-indicator').classList.add('bg-gray-200', 'text-gray-400');
+            document.getElementById('step2-indicator').style.backgroundColor = '';
+            
+            // Clear password
+            document.getElementById('password-input').value = '';
+            document.getElementById('password-error').classList.add('hidden');
+        }
+
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password-input');
+            const icon = document.getElementById('password-toggle-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Handle login form submission
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('password-input').value;
+            const passwordError = document.getElementById('password-error');
+            const loginBtn = document.getElementById('login-btn');
+            
+            if (!password) {
+                passwordError.textContent = 'Please enter your password';
+                passwordError.classList.remove('hidden');
+                return;
+            }
+
+            // Show loading state
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Logging in...';
+            loginBtn.disabled = true;
+
+            // Get user data and verify password
+            database.ref('users/' + userAccountNumber).once('value', (snapshot) => {
+                const user = snapshot.val();
+                
+                if (!user) {
+                    passwordError.textContent = 'User not found. Please try again.';
+                    passwordError.classList.remove('hidden');
+                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Login';
+                    loginBtn.disabled = false;
+                    return;
+                }
+
+                // Check password
+                if (user.password !== password) {
+                    passwordError.textContent = 'Incorrect password. Please try again.';
+                    passwordError.classList.remove('hidden');
+                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Login';
+                    loginBtn.disabled = false;
+                    document.getElementById('password-input').value = '';
+                    document.getElementById('password-input').focus();
+                    return;
+                }
+
+                // Check account status
+                if (user.status !== 'active') {
+                    passwordError.textContent = 'Your account is ' + user.status + '. Please contact support.';
+                    passwordError.classList.remove('hidden');
+                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Login';
+                    loginBtn.disabled = false;
+                    return;
+                }
+
+                passwordError.classList.add('hidden');
+
+                // Save login session
+                const rememberMe = document.getElementById('remember-me').checked;
+                if (rememberMe) {
+                    localStorage.setItem('loggedInUser', userAccountNumber);
+                } else {
+                    sessionStorage.setItem('loggedInUser', userAccountNumber);
+                }
+
+                // Update last login
+                database.ref('users/' + userAccountNumber + '/lastLogin').set(Date.now());
+
+                // Success - redirect to dashboard
+                loginBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Success!';
+                loginBtn.style.backgroundColor = '#10b981';
+                loginBtn.onmouseover = null;
+                loginBtn.onmouseout = null;
+                
+                setTimeout(() => {
+                    window.location.href = 'userdashboard.html';
+                }, 500);
+            });
+        });
+
+        // Allow Enter key on email input
+        document.getElementById('email-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                goToStep2();
+            }
+        });
+
+        // Check if user is already logged in
+        window.addEventListener('DOMContentLoaded', function() {
+            const loggedInUser = sessionStorage.getItem('loggedInUser') || localStorage.getItem('loggedInUser');
+            if (loggedInUser) {
+                // Check if session is still valid
+                database.ref('users/' + loggedInUser).once('value', (snapshot) => {
+                    if (snapshot.exists() && snapshot.val().status === 'active') {
+                        window.location.href = 'userdashboard.html';
+                    } else {
+                        sessionStorage.removeItem('loggedInUser');
+                        localStorage.removeItem('loggedInUser');
+                    }
+                });
+            }
+        });
+    </script>
+
+<!-- Begin of Chaport Live Chat code -->
+<script type="text/javascript">
+(function(w,d,v3){
+w.chaportConfig = {
+  appId : '6984ad771d1ca94a1cab1154',
+};
+
+if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push(arguments)};v3.on=function(e,fn){if(!v3._l[e])v3._l[e]=[];v3._l[e].push(fn)};var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://app.chaport.com/javascripts/insert.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss)})(window, document);
+</script>
+<!-- End of Chaport Live Chat code -->
+
+</body>
+</html>

@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Worldtree Publishing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .chart-container {
+            height: 30px !important;
+            max-height: 30px !important;
+            width: 100%;
+            overflow: hidden;
+        }
+        .currency-card {
+            max-height: 110px;
+        }
+        :root {
+            --navy-blue: #001f3f;
+            --navy-light: #003d7a;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-btn" class="lg:hidden fixed top-4 left-4 z-50 text-white p-3 rounded-lg shadow-lg" style="background-color: var(--navy-blue);">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed lg:sticky top-0 left-0 h-screen w-64 text-white transform -translate-x-full lg:translate-x-0 transition-transform duration-300 z-40 overflow-y-auto" style="background-color: var(--navy-blue);">
+            <div class="p-6">
+                <div class="flex items-center justify-center mb-8">
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+                        <i class="fas fa-university text-xl" style="color: var(--navy-blue);"></i>
+                    </div>
+                </div>
+
+                <p class="text-xs uppercase tracking-wider mb-4 opacity-75">Menu</p>
+
+                <nav class="space-y-2">
+                    <a href="#" onclick="showSection('dashboard', event)" class="flex items-center space-x-3 px-4 py-3 rounded-lg transition nav-link active-nav" style="background-color: var(--navy-light);">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+
+                    <a href="#" onclick="showSection('account-details', event)" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-opacity-20 hover:bg-white transition nav-link">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Account Details</span>
+                    </a>
+
+                    <p class="text-xs uppercase tracking-wider mt-6 mb-4 opacity-75">Fund Transfer</p>
+
+                    <a href="#" onclick="showSection('bank-transfer', event)" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-opacity-20 hover:bg-white transition nav-link">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Bank Transfer</span>
+                    </a>
+
+                    <a href="#" onclick="showSection('transfer-history', event)" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-opacity-20 hover:bg-white transition nav-link">
+                        <i class="fas fa-history"></i>
+                        <span>Transfer History</span>
+                    </a>
+
+                    <p class="text-xs uppercase tracking-wider mt-6 mb-4 opacity-75">Account</p>
+
+                    <a href="#" onclick="logout()" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-red-700 transition">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 lg:ml-0 w-full">
+            <!-- Header -->
+            <header class="bg-white shadow-sm sticky top-0 z-30">
+                <div class="px-4 lg:px-8 py-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <h1 class="text-xl lg:text-2xl font-bold text-gray-800 ml-12 lg:ml-0">Worldtree Publishing Bank</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="hidden sm:flex items-center space-x-2">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background-color: var(--navy-blue);">
+                                <i class="fas fa-user text-white"></i>
+                            </div>
+                            <div class="hidden md:block">
+                                <p class="text-sm font-semibold text-gray-800" id="header-user-name">Loading...</p>
+                                <p class="text-xs text-gray-500" id="header-user-email">Loading...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="content-section p-4 lg:p-8">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Hello <span id="user-greeting">User</span></h2>
+                    <p class="text-sm text-gray-500">Last log in: <span id="last-login">Today</span></p>
+                </div>
+
+                <!-- Currency Rates -->
+                <div class="mb-6">
+                    <p class="text-xs uppercase tracking-wider text-gray-500 mb-3">Quick Access to Recent Quotes</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <div class="bg-white rounded-lg p-3 shadow-sm currency-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <p class="text-xs font-semibold text-gray-600">GBP/EUR</p>
+                                    <p class="text-lg font-bold text-gray-800" id="gbp-eur-rate">Loading...</p>
+                                </div>
+                                <span class="text-xs px-2 py-1 rounded-full" id="gbp-eur-change">...</span>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="gbp-eur-chart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg p-3 shadow-sm currency-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <p class="text-xs font-semibold text-gray-600">GBP/USD</p>
+                                    <p class="text-lg font-bold text-gray-800" id="gbp-usd-rate">Loading...</p>
+                                </div>
+                                <span class="text-xs px-2 py-1 rounded-full" id="gbp-usd-change">...</span>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="gbp-usd-chart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg p-3 shadow-sm currency-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <p class="text-xs font-semibold text-gray-600">USD/EUR</p>
+                                    <p class="text-lg font-bold text-gray-800" id="usd-eur-rate">Loading...</p>
+                                </div>
+                                <span class="text-xs px-2 py-1 rounded-full" id="usd-eur-change">...</span>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="usd-eur-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Card -->
+                <div class="rounded-3xl p-6 lg:p-8 text-white shadow-2xl mb-6" style="background: linear-gradient(135deg, var(--navy-blue) 0%, var(--navy-light) 100%);">
+                    <div class="flex items-start justify-between mb-6">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-14 h-14 bg-white bg-opacity-20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                                <i class="fas fa-university text-2xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm opacity-90">WORLDTREE PUBLISHING</p>
+                                <p class="text-lg font-bold">BASIC Checking ACCOUNT</p>
+                            </div>
+                        </div>
+                        <button onclick="showSection('account-details')" class="text-white opacity-75 hover:opacity-100">
+                            <i class="fas fa-info-circle text-xl"></i>
+                        </button>
+                    </div>
+
+                    <div class="mb-6">
+                        <p class="text-sm opacity-75 mb-1">Acc No: <span id="account-number">Loading...</span></p>
+                        <div class="mt-4">
+                            <p class="text-sm opacity-75 mb-1">AVAILABLE BALANCE</p>
+                            <p class="text-4xl lg:text-5xl font-bold" id="account-balance">$0.00</p>
+                            <p class="text-sm mt-2 px-3 py-1 bg-white bg-opacity-20 rounded-full inline-block backdrop-blur-sm">
+                                <i class="fas fa-check-circle mr-1"></i><span id="account-status">Active Account</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3">
+                        <button onclick="showSection('bank-transfer')" class="flex flex-col items-center justify-center p-3 bg-white bg-opacity-10 rounded-xl hover:bg-opacity-20 transition backdrop-blur-sm">
+                            <i class="fas fa-exchange-alt text-2xl mb-2"></i>
+                            <span class="text-xs font-medium">Transfer</span>
+                        </button>
+                        <button onclick="showSection('transfer-history')" class="flex flex-col items-center justify-center p-3 bg-white bg-opacity-10 rounded-xl hover:bg-opacity-20 transition backdrop-blur-sm">
+                            <i class="fas fa-history text-2xl mb-2"></i>
+                            <span class="text-xs font-medium">History</span>
+                        </button>
+                        <button class="flex flex-col items-center justify-center p-3 bg-white bg-opacity-10 rounded-xl hover:bg-opacity-20 transition backdrop-blur-sm">
+                            <i class="fas fa-ellipsis-h text-2xl mb-2"></i>
+                            <span class="text-xs font-medium">More</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Get Financial Advice -->
+                <div class="flex justify-end mb-6">
+                    <button class="flex items-center space-x-2 text-sm font-medium" style="color: var(--navy-blue);">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Get financial advice</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Account Details Section -->
+            <div id="account-details-section" class="content-section hidden p-4 lg:p-8">
+                <h2 class="text-2xl lg:text-3xl font-bold text-gray-800 mb-6">Account Details</h2>
+                <div class="bg-white rounded-2xl shadow-lg p-6 lg:p-8 max-w-3xl">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Full Name</p>
+                            <p class="text-lg font-semibold text-gray-800" id="detail-fullname">Loading...</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Username</p>
+                            <p class="text-lg font-semibold text-gray-800" id="detail-username">Loading...</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Email</p>
+                            <p class="text-lg font-semibold text-gray-800" id="detail-email">Loading...</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Phone</p>
+                            <p class="text-lg font-semibold text-gray-800" id="detail-phone">Loading...</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Account Number</p>
+                            <p class="text-lg font-semibold text-gray-800" id="detail-account">Loading...</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Account Type</p>
+                            <p class="text-lg font-semibold text-gray-800" id="detail-type">Loading...</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Currency</p>
+                            <p class="text-lg font-semibold text-gray-800" id="detail-currency">Loading...</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Country</p>
+                            <p class="text-lg font-semibold text-gray-800" id="detail-country">Loading...</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Balance</p>
+                            <p class="text-lg font-semibold text-gray-800" id="detail-balance">Loading...</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Status</p>
+                            <p class="text-lg font-semibold" id="detail-status">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bank Transfer Section -->
+            <div id="bank-transfer-section" class="content-section hidden p-4 lg:p-8">
+                <h2 class="text-2xl lg:text-3xl font-bold text-gray-800 mb-6">Bank Transfer</h2>
+                <div class="bg-white rounded-2xl shadow-lg p-6 lg:p-8 max-w-2xl">
+                    <form id="transfer-form" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Recipient Account Number</label>
+                            <input type="text" id="recipient-account" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
+                                   style="--tw-ring-color: var(--navy-blue);"
+                                   placeholder="Enter recipient account number">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Amount ($)</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </span>
+                                <input type="number" id="transfer-amount" step="0.01" min="0.01" required 
+                                       class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
+                                       style="--tw-ring-color: var(--navy-blue);"
+                                       placeholder="0.00">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                            <textarea id="transfer-description" rows="3" required
+                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent resize-none"
+                                      style="--tw-ring-color: var(--navy-blue);"
+                                      placeholder="Enter transfer description"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Transaction PIN</label>
+                            <input type="password" id="transfer-pin" maxlength="4" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
+                                   style="--tw-ring-color: var(--navy-blue);"
+                                   placeholder="Enter 4-digit PIN">
+                        </div>
+
+                        <button type="submit" class="w-full text-white py-4 rounded-lg transition font-semibold text-lg" style="background-color: var(--navy-blue);" onmouseover="this.style.backgroundColor='var(--navy-light)'" onmouseout="this.style.backgroundColor='var(--navy-blue)'">
+                            <i class="fas fa-paper-plane mr-2"></i>Initiate Transfer
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Transfer History Section -->
+            <div id="transfer-history-section" class="content-section hidden p-4 lg:p-8">
+                <h2 class="text-2xl lg:text-3xl font-bold text-gray-800 mb-6">Transfer History</h2>
+                
+                <div class="bg-white rounded-2xl shadow-lg p-4 lg:p-6">
+                    <!-- Filters -->
+                    <div class="mb-6 flex flex-col sm:flex-row gap-4">
+                        <input type="text" id="history-search" placeholder="Search transfers..." 
+                               class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2"
+                               style="--tw-ring-color: var(--navy-blue);">
+                        <select id="history-status-filter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2"
+                                style="--tw-ring-color: var(--navy-blue);">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+
+                    <!-- Transfer List -->
+                    <div id="history-container" class="space-y-3">
+                        <!-- Transfer items will be inserted here -->
+                    </div>
+
+                    <!-- Pagination -->
+                    <div id="history-pagination" class="mt-6 flex justify-center items-center gap-2">
+                        <!-- Pagination will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script src="firebase-config.js"></script>
+    <script>
+        // Global variables
+        let currentUser = null;
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let allTransfers = [];
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const icon = this.querySelector('i');
+            sidebar.classList.toggle('-translate-x-full');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        // Section navigation
+        function showSection(sectionName, event) {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.add('hidden'));
+            
+            document.getElementById(sectionName + '-section').classList.remove('hidden');
+            
+            // Update active nav
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active-nav');
+                link.style.backgroundColor = '';
+            });
+            
+            if (event && event.target) {
+                const activeLink = event.target.closest('.nav-link');
+                if (activeLink) {
+                    activeLink.classList.add('active-nav');
+                    activeLink.style.backgroundColor = 'var(--navy-light)';
+                }
+            }
+            
+            // Close mobile menu
+            if (window.innerWidth < 1024) {
+                document.getElementById('sidebar').classList.add('-translate-x-full');
+                document.querySelector('#mobile-menu-btn i').classList.add('fa-bars');
+                document.querySelector('#mobile-menu-btn i').classList.remove('fa-times');
+            }
+
+            if (sectionName === 'transfer-history') {
+                loadTransferHistory();
+            }
+        }
+
+        // Load user data on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            // Get logged in user account number from sessionStorage or localStorage
+            const loggedInAccount = sessionStorage.getItem('loggedInUser') || localStorage.getItem('loggedInUser');
+            
+            if (!loggedInAccount) {
+                alert('Please login first');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            loadUserData(loggedInAccount);
+            loadCurrencyRates();
+            
+            // Refresh currency rates every 60 seconds
+            setInterval(loadCurrencyRates, 60000);
+        });
+
+        // Load user data
+        function loadUserData(accountNumber) {
+            database.ref('users/' + accountNumber).on('value', (snapshot) => {
+                currentUser = snapshot.val();
+                
+                if (!currentUser) {
+                    alert('User not found');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Check if account is active
+                if (currentUser.status !== 'active') {
+                    alert('Your account is ' + currentUser.status + '. Please contact support.');
+                    logout();
+                    return;
+                }
+
+                // Update all user info in the dashboard
+                document.getElementById('user-greeting').textContent = currentUser.firstName || currentUser.fullName;
+                document.getElementById('header-user-name').textContent = currentUser.fullName;
+                document.getElementById('header-user-email').textContent = currentUser.email;
+                document.getElementById('account-number').textContent = currentUser.accountNumber;
+                document.getElementById('account-balance').textContent = '$' + parseFloat(currentUser.balance || 0).toLocaleString('en-US', {minimumFractionDigits: 2});
+                document.getElementById('account-status').textContent = currentUser.status === 'active' ? 'Active Account' : currentUser.status;
+                
+                // Account details
+                document.getElementById('detail-fullname').textContent = currentUser.fullName;
+                document.getElementById('detail-username').textContent = currentUser.username;
+                document.getElementById('detail-email').textContent = currentUser.email;
+                document.getElementById('detail-phone').textContent = currentUser.phone;
+                document.getElementById('detail-account').textContent = currentUser.accountNumber;
+                document.getElementById('detail-type').textContent = currentUser.accountType || 'N/A';
+                document.getElementById('detail-currency').textContent = currentUser.currency;
+                document.getElementById('detail-country').textContent = currentUser.country;
+                document.getElementById('detail-balance').textContent = '$' + parseFloat(currentUser.balance || 0).toLocaleString('en-US', {minimumFractionDigits: 2});
+                
+                const statusEl = document.getElementById('detail-status');
+                statusEl.textContent = currentUser.status;
+                statusEl.className = 'text-lg font-semibold ' + (currentUser.status === 'active' ? 'text-green-600' : 'text-red-600');
+            });
+        }
+
+        // Load currency rates with accurate live data
+        async function loadCurrencyRates() {
+            try {
+                // Using a reliable free API for accurate exchange rates
+                const response = await fetch('https://open.er-api.com/v6/latest/GBP');
+                const data = await response.json();
+                
+                if (data.result === "success") {
+                    const gbpEur = data.rates.EUR.toFixed(4);
+                    const gbpUsd = data.rates.USD.toFixed(4);
+                    const usdEur = (data.rates.EUR / data.rates.USD).toFixed(4);
+                    
+                    document.getElementById('gbp-eur-rate').textContent = gbpEur;
+                    document.getElementById('gbp-usd-rate').textContent = gbpUsd;
+                    document.getElementById('usd-eur-rate').textContent = usdEur;
+                    
+                    // Create compact charts
+                    createMiniChart('gbp-eur-chart', 'green');
+                    createMiniChart('gbp-usd-chart', 'green');
+                    createMiniChart('usd-eur-chart', 'red');
+                    
+                    // Calculate realistic change percentages
+                    const gbpEurChange = ((Math.random() * 0.5) - 0.25).toFixed(3);
+                    const gbpUsdChange = ((Math.random() * 0.5) - 0.25).toFixed(3);
+                    const usdEurChange = ((Math.random() * 0.5) - 0.25).toFixed(3);
+                    
+                    document.getElementById('gbp-eur-change').textContent = (gbpEurChange >= 0 ? '+' : '') + gbpEurChange + '%';
+                    document.getElementById('gbp-eur-change').className = 'text-xs px-2 py-1 rounded-full ' + (gbpEurChange >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700');
+                    
+                    document.getElementById('gbp-usd-change').textContent = (gbpUsdChange >= 0 ? '+' : '') + gbpUsdChange + '%';
+                    document.getElementById('gbp-usd-change').className = 'text-xs px-2 py-1 rounded-full ' + (gbpUsdChange >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700');
+                    
+                    document.getElementById('usd-eur-change').textContent = (usdEurChange >= 0 ? '+' : '') + usdEurChange + '%';
+                    document.getElementById('usd-eur-change').className = 'text-xs px-2 py-1 rounded-full ' + (usdEurChange >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700');
+                }
+            } catch (error) {
+                console.error('Error loading currency rates:', error);
+                // Fallback display
+                document.getElementById('gbp-eur-rate').textContent = 'N/A';
+                document.getElementById('gbp-usd-rate').textContent = 'N/A';
+                document.getElementById('usd-eur-rate').textContent = 'N/A';
+            }
+        }
+
+        // Create compact mini chart
+        function createMiniChart(canvasId, color) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Clear existing chart
+            if (canvas.chart) {
+                canvas.chart.destroy();
+            }
+            
+            // Generate realistic market data simulation
+            const baseValue = 100;
+            const data = [];
+            let currentValue = baseValue;
+            
+            for (let i = 0; i < 12; i++) {
+                const change = (Math.random() - 0.5) * 2;
+                currentValue += change;
+                data.push(currentValue);
+            }
+            
+            canvas.chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 12}, (_, i) => i),
+                    datasets: [{
+                        data: data,
+                        borderColor: color === 'green' ? '#10b981' : '#ef4444',
+                        backgroundColor: color === 'green' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 1.5,
+                        pointRadius: 0,
+                        pointHoverRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    },
+                    scales: {
+                        x: { 
+                            display: false,
+                            grid: { display: false }
+                        },
+                        y: { 
+                            display: false,
+                            grid: { display: false }
+                        }
+                    },
+                    layout: {
+                        padding: 0
+                    }
+                }
+            });
+        }
+
+        // Handle transfer form submission
+        document.getElementById('transfer-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const recipientAccount = document.getElementById('recipient-account').value.trim();
+            const amount = parseFloat(document.getElementById('transfer-amount').value);
+            const description = document.getElementById('transfer-description').value;
+            const pin = document.getElementById('transfer-pin').value;
+            
+            // Validate PIN
+            if (pin !== currentUser.pin) {
+                alert('Invalid PIN');
+                return;
+            }
+            
+            // Validate amount
+            if (amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+            
+            // Validate recipient account number
+            if (!recipientAccount) {
+                alert('Please enter recipient account number');
+                return;
+            }
+            
+            // Check if trying to transfer to self
+            if (recipientAccount === currentUser.accountNumber) {
+                alert('Cannot transfer to your own account');
+                return;
+            }
+            
+            // Check if recipient exists in system
+            database.ref('users/' + recipientAccount).once('value', (snapshot) => {
+                const recipient = snapshot.val();
+                
+                // Create transfer record - accepts any account number (system or external)
+                const transferData = {
+                    from: currentUser.accountNumber || '',
+                    fromName: currentUser.fullName || currentUser.firstName || 'Unknown',
+                    to: recipientAccount,
+                    toName: (recipient && recipient.fullName) ? recipient.fullName : 'External Account',
+                    amount: amount,
+                    description: description || '',
+                    status: 'pending',
+                    date: Date.now(),
+                    initiatedBy: currentUser.accountNumber || ''
+                };
+                
+                // Save transfer to database - balance will NOT be deducted until admin approves
+                database.ref('transfers').push(transferData)
+                    .then(() => {
+                        alert('Transfer initiated successfully! Your transfer is pending admin approval. Balance will be deducted once approved.');
+                        document.getElementById('transfer-form').reset();
+                        showSection('transfer-history');
+                        loadTransferHistory();
+                    })
+                    .catch((error) => {
+                        alert('Error initiating transfer: ' + error.message);
+                    });
+            });
+        });
+
+        // Load transfer history
+        function loadTransferHistory() {
+            database.ref('transfers').on('value', (snapshot) => {
+                const transfers = snapshot.val();
+                allTransfers = [];
+                
+                if (transfers) {
+                    Object.keys(transfers).forEach(transferId => {
+                        const transfer = transfers[transferId];
+                        // Include transfers where user is sender OR receiver
+                        if (transfer.from === currentUser.accountNumber || transfer.to === currentUser.accountNumber) {
+                            allTransfers.push({
+                                id: transferId,
+                                ...transfer
+                            });
+                        }
+                    });
+                }
+                
+                // Sort by date (newest first)
+                allTransfers.sort((a, b) => b.date - a.date);
+                filterAndDisplayHistory();
+            });
+        }
+
+        // Filter and display history
+        function filterAndDisplayHistory() {
+            const searchTerm = document.getElementById('history-search').value.toLowerCase();
+            const statusFilter = document.getElementById('history-status-filter').value;
+            
+            let filtered = allTransfers.filter(transfer => {
+                const matchesSearch = (transfer.fromName || '').toLowerCase().includes(searchTerm) || 
+                                    (transfer.toName || '').toLowerCase().includes(searchTerm) ||
+                                    (transfer.description || '').toLowerCase().includes(searchTerm);
+                const matchesStatus = statusFilter === 'all' || transfer.status === statusFilter;
+                return matchesSearch && matchesStatus;
+            });
+            
+            displayHistory(filtered);
+        }
+
+        // Display history
+        function displayHistory(transfers) {
+            const container = document.getElementById('history-container');
+            container.innerHTML = '';
+            
+            if (transfers.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-gray-400">
+                        <i class="fas fa-inbox text-5xl mb-4"></i>
+                        <p class="text-lg">No transfers found</p>
+                    </div>
+                `;
+                document.getElementById('history-pagination').innerHTML = '';
+                return;
+            }
+            
+            // Pagination
+            const totalPages = Math.ceil(transfers.length / itemsPerPage);
+            const startIdx = (currentPage - 1) * itemsPerPage;
+            const endIdx = startIdx + itemsPerPage;
+            const pageTransfers = transfers.slice(startIdx, endIdx);
+            
+            pageTransfers.forEach(transfer => {
+                const isOutgoing = transfer.from === currentUser.accountNumber;
+                const statusColor = transfer.status === 'approved' ? 'bg-green-100 text-green-700' :
+                                  transfer.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
+                                  'bg-red-100 text-red-700';
+                
+                const item = document.createElement('div');
+                item.className = 'flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition';
+                item.innerHTML = `
+                    <div class="flex items-center space-x-4 flex-1 min-w-0">
+                        <div class="w-12 h-12 ${isOutgoing ? 'bg-red-100' : 'bg-green-100'} rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-${isOutgoing ? 'arrow-up' : 'arrow-down'} text-${isOutgoing ? 'red' : 'green'}-600"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-semibold text-gray-800 truncate">${isOutgoing ? (transfer.toName || 'External Account') : (transfer.fromName || 'Unknown')}</p>
+                            <p class="text-sm text-gray-500 truncate">${transfer.description || ''}</p>
+                            <p class="text-xs text-gray-400 mt-1">${new Date(transfer.date).toLocaleDateString()} ${new Date(transfer.date).toLocaleTimeString()}</p>
+                        </div>
+                    </div>
+                    <div class="text-right flex-shrink-0 ml-4">
+                        <p class="font-bold text-lg ${isOutgoing ? 'text-red-600' : 'text-green-600'}">
+                            ${isOutgoing ? '-' : '+'}${parseFloat(transfer.amount).toLocaleString('en-US', {minimumFractionDigits: 2})}
+                        </p>
+                        <span class="inline-block mt-1 px-2 py-1 rounded-full text-xs ${statusColor}">${transfer.status}</span>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+            
+            // Pagination controls
+            if (totalPages > 1) {
+                const paginationDiv = document.getElementById('history-pagination');
+                paginationDiv.innerHTML = `
+                    <button onclick="changeHistoryPage(${currentPage - 1})" 
+                            ${currentPage === 1 ? 'disabled' : ''} 
+                            class="px-4 py-2 rounded-lg text-white ${currentPage === 1 ? 'bg-gray-400 cursor-not-allowed' : ''}"
+                            style="${currentPage === 1 ? '' : 'background-color: var(--navy-blue);'}">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span class="text-sm text-gray-600 px-4">Page ${currentPage} of ${totalPages}</span>
+                    <button onclick="changeHistoryPage(${currentPage + 1})" 
+                            ${currentPage === totalPages ? 'disabled' : ''} 
+                            class="px-4 py-2 rounded-lg text-white ${currentPage === totalPages ? 'bg-gray-400 cursor-not-allowed' : ''}"
+                            style="${currentPage === totalPages ? '' : 'background-color: var(--navy-blue);'}">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                `;
+            } else {
+                document.getElementById('history-pagination').innerHTML = '';
+            }
+        }
+
+        // Change history page
+        function changeHistoryPage(page) {
+            const searchTerm = document.getElementById('history-search').value.toLowerCase();
+            const statusFilter = document.getElementById('history-status-filter').value;
+            
+            let filtered = allTransfers.filter(transfer => {
+                const matchesSearch = (transfer.fromName || '').toLowerCase().includes(searchTerm) || 
+                                    (transfer.toName || '').toLowerCase().includes(searchTerm) ||
+                                    (transfer.description || '').toLowerCase().includes(searchTerm);
+                const matchesStatus = statusFilter === 'all' || transfer.status === statusFilter;
+                return matchesSearch && matchesStatus;
+            });
+            
+            const totalPages = Math.ceil(filtered.length / itemsPerPage);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                displayHistory(filtered);
+            }
+        }
+
+        // Add event listeners for filters
+        document.getElementById('history-search').addEventListener('input', function() {
+            currentPage = 1;
+            filterAndDisplayHistory();
+        });
+
+        document.getElementById('history-status-filter').addEventListener('change', function() {
+            currentPage = 1;
+            filterAndDisplayHistory();
+        });
+
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.removeItem('loggedInUser');
+                localStorage.removeItem('loggedInUser');
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+
+<!-- Begin of Chaport Live Chat code -->
+<script type="text/javascript">
+(function(w,d,v3){
+w.chaportConfig = {
+  appId : '6984ad771d1ca94a1cab1154',
+};
+
+if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push(arguments)};v3.on=function(e,fn){if(!v3._l[e])v3._l[e]=[];v3._l[e].push(fn)};var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://app.chaport.com/javascripts/insert.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss)})(window, document);
+</script>
+<!-- End of Chaport Live Chat code -->
+
+</body>
+</html>

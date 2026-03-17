@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-user-shield text-white text-3xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900">Admin Login</h1>
+            <p class="text-gray-600 mt-2">Sign in to access the dashboard</p>
+        </div>
+
+        <form id="login-form" class="space-y-6">
+            <div>
+                <label for="email" class="block text-gray-700 font-medium mb-2">Email Address</label>
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                        <i class="fas fa-envelope"></i>
+                    </span>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        required 
+                        class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" 
+                        placeholder="admin@gmail.com"
+                    >
+                </div>
+            </div>
+
+            <div>
+                <label for="password" class="block text-gray-700 font-medium mb-2">Password</label>
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                        <i class="fas fa-lock"></i>
+                    </span>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        required 
+                        class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" 
+                        placeholder="Enter your password"
+                    >
+                    <button 
+                        type="button" 
+                        onclick="togglePassword()" 
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                        <i class="fas fa-eye" id="toggle-icon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="error-message" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center">
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                <span id="error-text">Invalid credentials</span>
+            </div>
+
+            <button 
+                type="submit" 
+                id="login-btn"
+                class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition flex items-center justify-center"
+            >
+                <i class="fas fa-sign-in-alt mr-2"></i>
+                <span>Sign In</span>
+            </button>
+        </form>
+
+        <div class="mt-6 text-center text-sm text-gray-600">
+            <p>Protected Admin Area</p>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
+    
+    <!-- Login Script -->
+    <script>
+        // Initialize Firebase Auth
+        const auth = firebase.auth();
+
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggle-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            const errorText = document.getElementById('error-text');
+            errorText.textContent = message;
+            errorDiv.classList.remove('hidden');
+            
+            setTimeout(() => {
+                errorDiv.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Handle form submission
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('login-btn');
+            
+            // Disable button and show loading
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i><span>Signing in...</span>';
+            
+            try {
+                // Sign in with Firebase Auth
+                await auth.signInWithEmailAndPassword(email, password);
+                
+                // Set admin session
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                sessionStorage.setItem('adminEmail', email);
+                
+                // Redirect to dashboard
+                window.location.href = 'admin_dashbord.html';
+            } catch (error) {
+                console.error('Login error:', error);
+                
+                let errorMessage = 'Invalid email or password';
+                
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = 'No admin account found with this email';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'Incorrect password';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Invalid email format';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMessage = 'Too many failed attempts. Please try again later';
+                }
+                
+                showError(errorMessage);
+                
+                // Re-enable button
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i><span>Sign In</span>';
+            }
+        });
+
+        // Check if already logged in
+        auth.onAuthStateChanged((user) => {
+            if (user && sessionStorage.getItem('adminLoggedIn') === 'true') {
+                window.location.href = 'admin_dashbord.html';
+            }
+        });
+    </script>
+</body>
+</html>
